@@ -7,6 +7,7 @@ from api.models import ApiUser, Fold, Product, Take
 from api.permission import IsProvider, IsConsumer
 from api.serializers import UserSerialiser, FoldSerializer, ProductSerializer, TakeSerializer
 
+
 # Create your views here.
 class UserModelViewSet(viewsets.ModelViewSet):
     queryset = ApiUser.objects.all()

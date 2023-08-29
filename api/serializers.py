@@ -8,14 +8,22 @@ class UserSerialiser(serializers.Serializer):
         ('provider', 'Поставщик'),
         ('consumer', 'Потребитель'),
     )
-    username = serializers.CharField(max_length=120, validators=[
-        validators.UniqueValidator(ApiUser.objects.all())
-    ])
-    email = serializers.EmailField(validators=[
-        validators.UniqueValidator(ApiUser.objects.all())
-    ])
-    password = serializers.CharField(min_length=6, max_length=20, write_only=True)
-    user_type = serializers.ChoiceField(choices=USER_TYPE, label='Тип пользователя')
+    username = serializers.CharField(
+        max_length=120,
+        validators=[validators.UniqueValidator(ApiUser.objects.all())]
+    )
+    email = serializers.EmailField(
+        validators=[validators.UniqueValidator(ApiUser.objects.all())]
+    )
+    password = serializers.CharField(
+        min_length=6,
+        max_length=20,
+        write_only=True
+    )
+    user_type = serializers.ChoiceField(
+        choices=USER_TYPE,
+        label='Тип пользователя'
+    )
 
     def update(self, instance, validated_data):
         if email := validated_data.get('email'):
@@ -54,6 +62,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class TakeSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Take
         fields = '__all__'
