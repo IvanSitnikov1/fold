@@ -21,12 +21,25 @@ class Fold(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=120)
-    fold = models.ForeignKey(Fold, related_name='products', on_delete=models.CASCADE)
+    fold = models.ForeignKey(
+        Fold,
+        related_name='products',
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return f'{self.fold.name}. Product: {self.name}'
 
 
 class Take(models.Model):
-    product = models.ForeignKey(Product, related_name='taken', unique=True, on_delete=models.CASCADE)
-    user = models.ForeignKey(ApiUser, related_name='taken', on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        related_name='taken',
+        unique=True,
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        ApiUser,
+        related_name='taken',
+        on_delete=models.CASCADE
+    )
