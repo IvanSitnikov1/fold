@@ -4,6 +4,7 @@ from api.models import ApiUser, Fold, Product, Take
 
 
 class UserSerialiser(serializers.Serializer):
+    """Сериализатор для модели пользователя"""
     USER_TYPE = (
         ('provider', 'Поставщик'),
         ('consumer', 'Потребитель'),
@@ -26,6 +27,7 @@ class UserSerialiser(serializers.Serializer):
     )
 
     def update(self, instance, validated_data):
+        """Редактирование данных пользователя"""
         if email := validated_data.get('email'):
             instance.email = email
             instance.save(update_fields=['email'])
@@ -35,6 +37,7 @@ class UserSerialiser(serializers.Serializer):
         return instance
 
     def create(self, validated_data):
+        """Создание пользователя"""
         user = ApiUser.objects.create(
             email=validated_data['email'],
             username=validated_data['username'],
@@ -47,6 +50,7 @@ class UserSerialiser(serializers.Serializer):
 
 
 class FoldSerializer(serializers.ModelSerializer):
+    """Сериализатор модели склада"""
     class Meta:
         model = Fold
         fields = '__all__'
@@ -54,6 +58,7 @@ class FoldSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    """Сериализатор модели продукта"""
     class Meta:
         model = Product
         fields = '__all__'
@@ -61,6 +66,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class TakeSerializer(serializers.ModelSerializer):
+    """Сериализатор модели бронирования товара"""
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
