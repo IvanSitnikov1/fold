@@ -1,7 +1,6 @@
 from rest_framework import serializers, validators
 
 from api.models import ApiUser, Fold, Product, Take
-from api.tasks import send_info_add_product
 
 
 class UserSerialiser(serializers.Serializer):
@@ -64,13 +63,6 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
         extra_kwargs = {'id': {'read_only': True}}
-
-    def create(self, validated_data):
-        product = Product.objects.create(name=validated_data['name'], fold_id=validated_data['fold'].pk)
-        email = self.context['request'].user.email
-        send_info_add_product.delay(email, product.name, product.fold.name)
-
-        return product
 
 
 class TakeSerializer(serializers.ModelSerializer):
