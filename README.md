@@ -37,8 +37,17 @@ GET: http://127.0.0.1:8000/takes/{pk}/ - получение конкретног
 PUT: http://127.0.0.1:8000/takes/{pk}/ - редактирование продукта  
 DELETE: http://127.0.0.1:8000/takes/{pk}/ - удаление продукта  
 
-#### Запуск проекта: python manage.py runserver
-Приложение запускается по адресу: http://127.0.0.1:8000/  
+#### Запуск проекта:
+Установка зависимостей:  
+pip install -r requirements.txt  
+Запуск django:  
+python manage.py runserver  
+Запуск брокера сообщений:  
+docker run -d -p 6379:6379 redis
+Запуск celery worker, beat, flower:  
+celery -A fold worker -l info  
+celery -A fold beat -l info  
+celery -A fold.celery.app flower  
 
 *Данные для тестирования:  
 Поставщик:  

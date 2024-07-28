@@ -35,12 +35,12 @@ def send_info_add_product(email, product, fold):
 def write_to_logs():
     """Запись в файл информации о забронированных товарах"""
 
-    consumers = ApiUser.objects.filter(user_type='consumer')
-    for user in consumers:
-        taken = Take.objects.filter(user_id=user.pk)
-        reversed_products = Product.objects.filter(taken__in=taken)
-        for product in reversed_products:
-            data = f'{datetime.now()} - {user.username} - {product.name}\n--- --- ---'
-            with open('logs.txt', 'a') as f:
+    with open('logs.txt', 'a') as f:
+        consumers = ApiUser.objects.filter(user_type='consumer')
+        for user in consumers:
+            taken = Take.objects.filter(user_id=user.pk)
+            reversed_products = Product.objects.filter(taken__in=taken)
+            for product in reversed_products:
+                data = f'{datetime.now()} - {user.username} - {product.name}'
                 print(data, file=f)
-                print('--- --- ---', file=f)
+        print('--- --- ---', file=f)
