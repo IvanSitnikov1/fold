@@ -67,7 +67,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class TakeSerializer(serializers.ModelSerializer):
     """Сериализатор модели бронирования товара"""
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user = serializers.CharField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Take

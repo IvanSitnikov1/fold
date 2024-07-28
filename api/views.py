@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from api.models import ApiUser, Fold, Product, Take
@@ -33,11 +34,16 @@ class FoldModelViewSet(viewsets.ModelViewSet):
 
 class ProductModelViewSet(viewsets.ModelViewSet):
     """Создаются точки GRUD операций над продуктами"""
-    permission_classes = [IsProvider]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return [AllowAny()]
+        return [IsProvider()]
+
     def create(self, request, *args, **kwargs):
+        """Добавление нового продукта и отправка уведомления"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -56,3 +62,6 @@ class TakeModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsConsumer]
     queryset = Take.objects.all()
     serializer_class = TakeSerializer
+
+    def get_queryset(self):
+        return Take.objects.filter(user=self.request.user)

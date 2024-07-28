@@ -7,7 +7,7 @@ router = DefaultRouter()
 router.register('users', UserModelViewSet)
 router.register('folds', FoldModelViewSet)
 router.register('products', ProductModelViewSet)
-router.register('takes', TakeModelViewSet)
+router.register('taken', TakeModelViewSet)
 
 urlpatterns = [
 
