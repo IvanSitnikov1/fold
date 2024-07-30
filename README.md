@@ -37,7 +37,9 @@ GET: http://127.0.0.1:8000/takes/{pk}/ - получение конкретног
 PUT: http://127.0.0.1:8000/takes/{pk}/ - редактирование продукта  
 DELETE: http://127.0.0.1:8000/takes/{pk}/ - удаление продукта  
 
-#### Запуск проекта:
+#### Запуск проекта(docker compose):
+docker compose up --build  
+#### Запуск в ручную
 Установка зависимостей:  
 pip install -r requirements.txt  
 Запуск django:  

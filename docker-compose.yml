@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  drf_app:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./:/app/
+    ports:
+      - 8000:8000
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  celery_worker:
+    build: .
+    command: celery -A fold worker -l info
+    volumes:
+      - ./:/app/
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  celery_beat:
+    build: .
+    command: celery -A fold beat -l info
+    volumes:
+      - ./:/app/
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  celery_flower:
+    build: .
+    command: celery -A fold.celery.app flower
+    volumes:
+      - ./:/app/
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    ports:
+      - 5555:5555
+    depends_on:
+      - drf_app
+
+  redis:
+    image: redis:5-alpine
